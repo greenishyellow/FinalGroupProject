@@ -9,11 +9,14 @@ public class GameEnding : MonoBehaviour
     public float displayImageDuration = 1f;
     public GameObject player;
     public CanvasGroup exitBackgroundImageCanvasGroup;
+    public AudioSource exitAudio;
     public CanvasGroup caughtBackgroundImageCanvasGroup;
+    public AudioSource caughtAudio;
 
     bool m_IsPlayerAtExit;
     bool m_IsPlayerCaught;
     float m_Timer;
+    bool m_HasAudioPlayed;
 
     void OnTriggerEnter(Collider other)
     {
@@ -24,41 +27,43 @@ public class GameEnding : MonoBehaviour
     }
 
     public void CaughtPlayer()
-    { 
-      m_IsPlayerCaught = true;
+    {
+        m_IsPlayerCaught = true;
     }
 
-    void Update ()
+    void Update()
     {
-        
-      if (m_IsPlayerAtExit) 
-        { 
-            EndLevel(exitBackgroundImageCanvasGroup, false);
-        }
-      else if (m_IsPlayerCaught) 
+        if (m_IsPlayerAtExit)
         {
-            EndLevel(caughtBackgroundImageCanvasGroup, true);
+            EndLevel(exitBackgroundImageCanvasGroup, false, exitAudio);
+        }
+        else if (m_IsPlayerCaught)
+        {
+            EndLevel(caughtBackgroundImageCanvasGroup, true, caughtAudio);
         }
     }
 
-    void EndLevel (CanvasGroup imageCanvasGroup, bool doRestart)
+    void EndLevel(CanvasGroup imageCanvasGroup, bool doRestart, AudioSource audioSource)
     {
+        if (!m_HasAudioPlayed)
+        {
+            audioSource.Play();
+            m_HasAudioPlayed = true;
+        }
+
         m_Timer += Time.deltaTime;
+        imageCanvasGroup.alpha = m_Timer / fadeDuration;
 
-        imageCanvasGroup.alpha = m_Timer/fadeDuration;
-
-        if (m_Timer > fadeDuration + displayImageDuration) 
+        if (m_Timer > fadeDuration + displayImageDuration)
         {
             if (doRestart)
-
             {
                 SceneManager.LoadScene(0);
-            } 
+            }
             else
             {
-                Application.Quit ();
+                Application.Quit();
             }
-           
         }
     }
 }
