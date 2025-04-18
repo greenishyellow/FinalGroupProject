@@ -12,6 +12,7 @@ public class GameEnding : MonoBehaviour
     public AudioSource exitAudio;
     public CanvasGroup caughtBackgroundImageCanvasGroup;
     public AudioSource caughtAudio;
+    public GameObject timer;
 
     bool m_IsPlayerAtExit;
     bool m_IsPlayerCaught;
