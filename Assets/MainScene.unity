@@ -5819,6 +5819,35 @@ GameObject:
     type: 3}
   m_PrefabInstance: {fileID: 5629502529705774901}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &1968335668
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1968335667}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bfbdb02f499dfec499dfe68cf9c1a8c4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  playerMovement: {fileID: 1968335670}
+  freezeDuration: 5
+  pressesRequired: 3
+  unfreezeButton: 114
+  isFrozen: 0
+--- !u!114 &1968335670 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 4585671795131640291, guid: df03c8d878f5027439caee89483bf9a8,
+    type: 3}
+  m_PrefabInstance: {fileID: 5629502529705774901}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1968335667}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 37720449f895bc04ba6c64a3cb7746d6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!4 &1968335672 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 5629502529833087507, guid: df03c8d878f5027439caee89483bf9a8,
@@ -6098,6 +6127,16 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 4585671795131640291, guid: df03c8d878f5027439caee89483bf9a8,
+        type: 3}
+      propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4585671795131640291, guid: df03c8d878f5027439caee89483bf9a8,
+        type: 3}
+      propertyPath: fearFreeze
+      value: 
+      objectReference: {fileID: 1968335668}
     - target: {fileID: 5629502529832922675, guid: df03c8d878f5027439caee89483bf9a8,
         type: 3}
       propertyPath: m_Name

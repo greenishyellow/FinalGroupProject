@@ -5,6 +5,7 @@ using UnityEngine;
 public class PlayerMovement : MonoBehaviour
 {
     public float turnSpeed = 20f;
+    public FearFreeze fearFreeze;
 
     Animator m_Animator;
     Rigidbody m_Rigidbody;
@@ -21,36 +22,51 @@ public class PlayerMovement : MonoBehaviour
 
     void FixedUpdate()
     {
-        float horizontal = Input.GetAxis("Horizontal");
-        float vertical = Input.GetAxis("Vertical");
-
-        m_Movement.Set(horizontal, 0f, vertical);
-        m_Movement.Normalize();
-
-        bool hasHorizontalInput = !Mathf.Approximately(horizontal, 0f);
-        bool hasVerticalInput = !Mathf.Approximately(vertical, 0f);
-        bool isWalking = hasHorizontalInput || hasVerticalInput;
-        m_Animator.SetBool("IsWalking", isWalking);
-
-        if (isWalking)
+        if (!fearFreeze.isFrozen)
         {
-            if (!m_AudioSource.isPlaying)
+            float horizontal = Input.GetAxis("Horizontal");
+            float vertical = Input.GetAxis("Vertical");
+
+            m_Movement.Set(horizontal, 0f, vertical);
+            m_Movement.Normalize();
+
+            bool hasHorizontalInput = !Mathf.Approximately(horizontal, 0f);
+            bool hasVerticalInput = !Mathf.Approximately(vertical, 0f);
+            bool isWalking = hasHorizontalInput || hasVerticalInput;
+            m_Animator.SetBool("IsWalking", isWalking);
+
+            if (isWalking)
             {
-                m_AudioSource.Play();
+                if (!m_AudioSource.isPlaying)
+                {
+                    m_AudioSource.Play();
+                }
             }
+            else
+            {
+                m_AudioSource.Stop();
+            }
+
+            Vector3 desiredForward = Vector3.RotateTowards(transform.forward, m_Movement, turnSpeed * Time.deltaTime, 0f);
+            m_Rotation = Quaternion.LookRotation(desiredForward);
         }
         else
         {
+            m_Animator.SetBool("IsWalking", false);
             m_AudioSource.Stop();
-        }
+            m_Movement = Vector3.zero;
 
-        Vector3 desiredForward = Vector3.RotateTowards(transform.forward, m_Movement, turnSpeed * Time.deltaTime, 0f);
-        m_Rotation = Quaternion.LookRotation(desiredForward);
+        }
     }
 
-    void OnAnimatorMove()
-    {
-        m_Rigidbody.MovePosition(m_Rigidbody.position + m_Movement * m_Animator.deltaPosition.magnitude);
-        m_Rigidbody.MoveRotation(m_Rotation);
+
+        void OnAnimatorMove()
+        {
+
+        if (!fearFreeze.isFrozen)
+        { 
+            m_Rigidbody.MovePosition(m_Rigidbody.position + m_Movement * m_Animator.deltaPosition.magnitude);
+            m_Rigidbody.MoveRotation(m_Rotation);
+        }
     }
 }
