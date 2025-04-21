@@ -1,6 +1,8 @@
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class FearFreeze : MonoBehaviour
 {
@@ -8,30 +10,37 @@ public class FearFreeze : MonoBehaviour
     public float freezeDuration = 5f;
     public int pressesRequired = 3;
     public KeyCode unfreezeButton = KeyCode.R;
+    public Image normalImage;
+    public Image freezeImage;
+    public TMP_Text freezeText;
 
     public bool isFrozen = false;
 
-    private int presses = 0;
+    private int presses = 3;
 
     private void Start()
     {
         //Start the fear freeze timer
         InvokeRepeating("CheckForFearFreeze", 1f, 5f);
+
+        normalImage.enabled = true;
+        freezeImage.enabled = false;
+        freezeText.enabled = false;
+   
     }
 
     private void Update()
     {
         //If the player is frozen and presses the unfreeze button
-        if (isFrozen && Input.GetKeyDown(unfreezeButton))
+        if (isFrozen && Input.GetKeyDown(KeyCode.R))
         {
-            //Increment the number of presses
-            presses++;
 
-            //If the player had pressed the button anough times, unfreeze them
-            if (presses >= pressesRequired) 
-            {
-                UnfreezePlayer();
+            presses++;
+            if (presses>= pressesRequired) 
+            { 
+             UnfreezePlayer();
             }
+            
         }
     }
 
@@ -54,18 +63,17 @@ public class FearFreeze : MonoBehaviour
      //Reset the number of presses
      presses= 0;
 
-        //Display a message to the player 
-        Debug.Log("You've been frozen by fear! Press the R button three time to unfreeze.");
-        //Start the freezer timer
-        StartCoroutine(FreezeTimer());
+        normalImage.enabled= false;
+        freezeImage.enabled = true;
+        freezeText.enabled = true;
+        freezeText.text = "You've been frozen by fear! Press the R button three time to unfreeze!";
+
     }
     private IEnumerator FreezerTimer()
     {
         yield return new WaitForSeconds(freezeDuration);
         UnfreezePlayer();
     }
-
-       
 
     private void UnfreezePlayer()
     {
@@ -75,43 +83,10 @@ public class FearFreeze : MonoBehaviour
         //Reset the frozen flag
         isFrozen= false;
 
-        //Display a message to the player
-        Debug.Log("Chill Out");
 
-        //Cancel any remaining freeze timer
-        CancelInvoke("UnfreezePlayerAutomatically");
+        freezeImage.enabled= false;
+        normalImage.enabled = true;
+        freezeText.enabled= false;
+        
     }
-
-    private void UnfreezePlayerAutomatically()
-    {
-        //Unfreeze the player automatically after the freeze duration
-        UnfreezePlayer();
-    }
-
-    private IEnumerator FreezeTimer()
-    {
-        yield return new WaitForSeconds(freezeDuration);
-        UnfreezePlayerAutomatically();
-    }
-
-    private void OnEnable()
-    {
-        //Start the freeze timer when the player is frozen
-        if (isFrozen)
-        {
-            StartCoroutine (FreezeTimer());
-        }
-    }
-
-    private void FreezePlayerForDuration()
-    {
-        //Freeze the player for a set duration 
-        StartCoroutine(FreezeTimer());
-    }
-
-    private void OnFreeze()
-    {
-        FreezePlayerForDuration();
-    }
-
 }
