@@ -6,6 +6,12 @@ public class PlayerMovement : MonoBehaviour
 {
     public float turnSpeed = 20f;
     public FearFreeze fearFreeze;
+    public float walkSpeed = 1f;
+    public float sprintSpeed = 2.5f;
+    public KeyCode sprintKey = KeyCode.LeftShift;
+
+    private float currentSpeed;
+    private Rigidbody rb;
 
     Animator m_Animator;
     Rigidbody m_Rigidbody;
@@ -18,6 +24,15 @@ public class PlayerMovement : MonoBehaviour
         m_Animator = GetComponent<Animator>();
         m_Rigidbody = GetComponent<Rigidbody>();
         m_AudioSource = GetComponent<AudioSource>();
+
+        rb = GetComponent<Rigidbody>();
+        currentSpeed = walkSpeed;
+    }
+
+    void Update()
+    {
+        HandleMovement();
+        HandleSprint();
     }
 
     void FixedUpdate()
@@ -55,13 +70,42 @@ public class PlayerMovement : MonoBehaviour
             m_Animator.SetBool("IsWalking", false);
             m_AudioSource.Stop();
             m_Movement = Vector3.zero;
+            rb.velocity = Vector3.zero;
 
         }
     }
 
-
-        void OnAnimatorMove()
+    void HandleMovement()
+    {
+        if (fearFreeze.isFrozen)
         {
+            rb.velocity = Vector3.zero;
+            return;
+        }
+
+        float moveHorizontal = Input.GetAxis("Horizontal");
+        float moveVertical = Input.GetAxis("Vertical");
+
+        Vector3 movement = new Vector3(moveHorizontal, 0.0f, moveVertical);
+        rb.velocity = movement * currentSpeed;
+    }
+
+
+    void HandleSprint()
+    {
+        if (Input.GetKeyDown(sprintKey))
+        {
+            currentSpeed = sprintSpeed;
+        }
+        if (Input.GetKeyUp(sprintKey))
+        {
+            currentSpeed = walkSpeed;
+        }
+    }
+
+
+    void OnAnimatorMove()
+    {        
 
         if (!fearFreeze.isFrozen)
         { 

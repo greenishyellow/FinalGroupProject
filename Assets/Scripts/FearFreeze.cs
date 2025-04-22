@@ -66,7 +66,7 @@ public class FearFreeze : MonoBehaviour
         normalImage.enabled= false;
         freezeImage.enabled = true;
         freezeText.enabled = true;
-        freezeText.text = "You've been frozen by fear! Press the R button three time to unfreeze!";
+        freezeText.text = "You're frozen in fear! Press the R button three times to unfreeze!";
 
     }
     private IEnumerator FreezerTimer()
