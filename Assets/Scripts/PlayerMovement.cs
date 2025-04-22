@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Runtime.CompilerServices;
 using UnityEngine;
 
 public class PlayerMovement : MonoBehaviour
@@ -13,20 +14,23 @@ public class PlayerMovement : MonoBehaviour
     private float currentSpeed;
     private Rigidbody rb;
 
-    Animator m_Animator;
-    Rigidbody m_Rigidbody;
-    AudioSource m_AudioSource;
-    Vector3 m_Movement;
-    Quaternion m_Rotation = Quaternion.identity;
+    private Animator m_Animator;
+    private Rigidbody m_Rigidbody;
+    private AudioSource m_AudioSource;
+    private Vector3 m_Movement;
+    private Quaternion m_Rotation = Quaternion.identity;
+
 
     void Start()
     {
+
         m_Animator = GetComponent<Animator>();
         m_Rigidbody = GetComponent<Rigidbody>();
         m_AudioSource = GetComponent<AudioSource>();
 
         rb = GetComponent<Rigidbody>();
         currentSpeed = walkSpeed;
+
     }
 
     void Update()
@@ -48,6 +52,7 @@ public class PlayerMovement : MonoBehaviour
             bool hasHorizontalInput = !Mathf.Approximately(horizontal, 0f);
             bool hasVerticalInput = !Mathf.Approximately(vertical, 0f);
             bool isWalking = hasHorizontalInput || hasVerticalInput;
+
             m_Animator.SetBool("IsWalking", isWalking);
 
             if (isWalking)
@@ -71,6 +76,7 @@ public class PlayerMovement : MonoBehaviour
             m_AudioSource.Stop();
             m_Movement = Vector3.zero;
             rb.velocity = Vector3.zero;
+            rb.angularVelocity = Vector3.zero; // Stop rotation
 
         }
     }
@@ -80,7 +86,7 @@ public class PlayerMovement : MonoBehaviour
         if (fearFreeze.isFrozen)
         {
             rb.velocity = Vector3.zero;
-            return;
+            return;
         }
 
         float moveHorizontal = Input.GetAxis("Horizontal");
@@ -103,12 +109,11 @@ public class PlayerMovement : MonoBehaviour
         }
     }
 
-
     void OnAnimatorMove()
-    {        
+    {
 
         if (!fearFreeze.isFrozen)
-        { 
+        {
             m_Rigidbody.MovePosition(m_Rigidbody.position + m_Movement * m_Animator.deltaPosition.magnitude);
             m_Rigidbody.MoveRotation(m_Rotation);
         }
