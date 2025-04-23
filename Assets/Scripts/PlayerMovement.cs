@@ -7,9 +7,18 @@ public class PlayerMovement : MonoBehaviour
 {
     public float turnSpeed = 20f;
     public FearFreeze fearFreeze;
-    public float walkSpeed = 1f;
+    public float walkSpeed = 0.75f;
     public float sprintSpeed = 2.5f;
     public KeyCode sprintKey = KeyCode.LeftShift;
+
+    public float maxStamina = 1f;
+    public float currentStamina;
+    public float staminaDepletionRate = 0.6f;
+    public float staminaRegenRate = 0.4f;
+    public UnityEngine.UI.Image staminaBar;
+    public float staminaRegenDelay = 3.0f;
+    private bool isStaminaDepleted = false;
+    private float staminaDepletedTime;
 
     private float currentSpeed;
     private Rigidbody rb;
@@ -37,6 +46,7 @@ public class PlayerMovement : MonoBehaviour
     {
         HandleMovement();
         HandleSprint();
+        UpdateStamina();
     }
 
     void FixedUpdate()
@@ -99,13 +109,45 @@ public class PlayerMovement : MonoBehaviour
 
     void HandleSprint()
     {
-        if (Input.GetKeyDown(sprintKey))
+        if (Input.GetKey(sprintKey) && currentStamina > 0 && !isStaminaDepleted)
         {
             currentSpeed = sprintSpeed;
+            currentStamina -= staminaDepletionRate * Time.deltaTime;
+            currentStamina = Mathf.Clamp(currentStamina, 0, maxStamina);
+
+            if (currentStamina <= 0)
+            {
+                isStaminaDepleted = true;
+                staminaDepletedTime = Time.time;
+            }
         }
-        if (Input.GetKeyUp(sprintKey))
+        else
         {
             currentSpeed = walkSpeed;
+        }
+    }
+
+    void UpdateStamina()
+    {
+        if (isStaminaDepleted)
+        {
+            if (Time.time - staminaDepletedTime >= staminaRegenDelay)
+            {
+                isStaminaDepleted = false;
+            }
+        }
+        else
+        {
+            if (currentSpeed != sprintSpeed)
+            {
+                currentStamina += staminaRegenRate * Time.deltaTime;
+                currentStamina = Mathf.Clamp(currentStamina, 0, maxStamina);
+            }
+        }
+
+        if (staminaBar != null)
+        {
+            staminaBar.fillAmount = currentStamina / maxStamina;
         }
     }
 

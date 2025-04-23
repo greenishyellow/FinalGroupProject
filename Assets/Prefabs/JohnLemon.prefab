@@ -375,6 +375,16 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   turnSpeed: 20
+  fearFreeze: {fileID: 0}
+  walkSpeed: 1
+  sprintSpeed: 2.5
+  sprintKey: 304
+  maxStamina: 1
+  currentStamina: 0
+  staminaDepletionRate: 0.2
+  staminaRegenRate: 0.1
+  staminaBar: {fileID: 5845316555091913316, guid: ab35fc3f02597a244a2bbc4148c25708,
+    type: 3}
 --- !u!82 &2479726204972200405
 AudioSource:
   m_ObjectHideFlags: 0
