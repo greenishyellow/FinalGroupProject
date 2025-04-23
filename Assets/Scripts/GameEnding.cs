@@ -67,9 +67,17 @@ public class GameEnding : MonoBehaviour
 
     void EndLevel(CanvasGroup imageCanvasGroup, bool doRestart, AudioSource audioSource)
     {
+        normalImage.enabled = false;
+        freezeImage.enabled = false;
+        freezeText.enabled = false;
+        TimerImage.enabled = false;
+        TimerText.enabled = false;
+        StaminaBar.enabled = false;
+        Overlay.enabled = false;
 
         if (!m_HasAudioPlayed)
         {
+            
             audioSource.Play();
             m_HasAudioPlayed = true;
         }
