@@ -1,7 +1,10 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 using UnityEngine.SceneManagement;
+using TMPro;
+using JetBrains.Annotations;
 
 public class GameEnding : MonoBehaviour
 {
@@ -13,6 +16,15 @@ public class GameEnding : MonoBehaviour
     public CanvasGroup caughtBackgroundImageCanvasGroup;
     public AudioSource caughtAudio;
     public GameObject timer;
+    public Image normalImage;
+    public Image freezeImage;
+    public TMP_Text freezeText;
+    public TMP_Text TimerText;
+    public Image TimerImage;
+    public Image StaminaBar;
+    public Image Overlay;
+
+
 
     bool m_IsPlayerAtExit;
     bool m_IsPlayerCaught;
@@ -30,6 +42,15 @@ public class GameEnding : MonoBehaviour
     public void CaughtPlayer()
     {
         m_IsPlayerCaught = true;
+
+
+        normalImage.enabled = false;
+        freezeImage.enabled = false;
+        freezeText.enabled = false;
+        TimerImage.enabled = false;
+        TimerText.enabled = false;
+        StaminaBar.enabled = false;
+        Overlay.enabled = false;
     }
 
     void Update()
@@ -46,6 +67,7 @@ public class GameEnding : MonoBehaviour
 
     void EndLevel(CanvasGroup imageCanvasGroup, bool doRestart, AudioSource audioSource)
     {
+
         if (!m_HasAudioPlayed)
         {
             audioSource.Play();

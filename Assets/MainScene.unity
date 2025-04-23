@@ -914,6 +914,13 @@ MonoBehaviour:
   caughtBackgroundImageCanvasGroup: {fileID: 1372831163}
   caughtAudio: {fileID: 290438631}
   timer: {fileID: 1886938084}
+  normalImage: {fileID: 55051991}
+  freezeImage: {fileID: 1177894269}
+  freezeText: {fileID: 1630076348}
+  TimerText: {fileID: 1287906515}
+  TimerImage: {fileID: 1886938086}
+  StaminaBar: {fileID: 1955990828}
+  Overlay: {fileID: 451730310}
 --- !u!1 &430684673
 GameObject:
   m_ObjectHideFlags: 0
